@@ -1,4 +1,4 @@
-# export-local-policy.ps1
+# export-current-policy.ps1
 # Collects local security posture data from Windows Server
 
 $ts = Get-Date -Format "yyyyMMdd-HHmm"
