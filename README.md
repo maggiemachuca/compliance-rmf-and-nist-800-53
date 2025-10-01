@@ -56,7 +56,7 @@ secpol.inf contents:
 <img width="851" height="820" alt="Screenshot 2025-09-30 at 4 42 03 PM" src="https://github.com/user-attachments/assets/fcd527f3-7976-4894-8922-3e8bae377ad9" />
 
 Scripts used:
-- [collect-baseline-evidence.ps1](scripts/collect-baseline-evidence.ps1)
+- [collect-baseline-evidence.ps1](scripts/export-current-policy.ps1)
 
 
 ## Step 3: Downloading Microsoft Security Compliance Toolkit (SCT)
@@ -81,12 +81,31 @@ GPOs` folder showing raw Group Policy backups:
 <img width="570" height="223" alt="Screenshot 2025-09-30 at 5 04 27 PM" src="https://github.com/user-attachments/assets/ad0afc3b-5442-4ce0-ab08-bf47bb20edfe" />
 
 
-## Step 4: Applying the Microsoft Security Baseline Using LGPO.exe
+## Step 4: Create safety net (optional)
+- I added myself to the **Remote Desktop Users** group.
+- I also added myself to "Allow log on through Remote Desktop Services" on Local Security Policy (secpol.msc)
+- Navigate to the setting "Deny log on through Remote Desktop Services" and make sure your username isn't here.
 
-I applied Microsoft’s official security baseline for Windows Server 2022 using the LGPO tool. This imported and enforced local security policies in alignment with NIST 800-53 control families (AC, IA, AU, CM, SC). I restarted the VM to make sure the changes are applied correctly.
+## Step 5: Capture a Snapshot of the System (optional)
+- I am going to create a snapshot of the system as it is right now. These steps (4 and 5) are done as a pre-caution in case we accidentally deny ourselves access from Windows Server 2022 after applying the Microsoft Security Baseline.
 
-- After applying baseline
+<img width="1347" height="293" alt="Screenshot 2025-09-30 at 10 37 11 PM" src="https://github.com/user-attachments/assets/22e528fa-4438-4ab0-8a52-525637d31ab4" />
+
+## Step 6: Applying the Microsoft Security Baseline Using LGPO.exe
+
+I applied Microsoft’s official security baseline for Windows Server 2022 using the LGPO tool. This imported and enforced local security policies in alignment with NIST 800-53 control families (AC, IA, AU, CM, SC). I restarted the VM to make sure the changes are applied correctly. You can use this script <a href="https://github.com/maggiemachuca/compliance-rmf-and-nist-800-53/blob/main/scripts/apply-microsoft-baseline.ps1">here</a>
+
+- After applying baseline:
 <img width="978" height="510" alt="Screenshot 2025-09-30 at 5 23 06 PM" src="https://github.com/user-attachments/assets/8f609fcf-ebc2-4ed1-9899-497ee8496a11" />
+
+After I applied the baseline, I did:
+
+```powershell
+gpupdate /force
+shutdown /r /t 0
+```
+
+
 
 
 ---- in progress ----
